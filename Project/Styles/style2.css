@@ -1,0 +1,17 @@
+h2 {
+	font: normal 25pt Arial;
+	color:white ;
+}
+h6 {
+	font:normal 15pt Calibri;
+	color: white;
+}
+
+div {
+	background-color: #808080;
+	padding: 20px;
+}
+table {
+	background-color:#191919;
+	width: 100%;
+}

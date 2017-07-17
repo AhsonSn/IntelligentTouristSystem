@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="css/style4.css" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <script src = "locationUtil.js"></script>
+    <script src = "loadash.js"></script>
+    <style >
+      html,
+      body {
+        font-family: Arial, sans-serif;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        height: 100%;
+        position: relative;
+        box-shadow: 1px 1px 1px rgba(0,0,0,0.09) inset;
+
+      }
+
+      input {
+        margin-top: 10px;
+      }
+
+      h1 {
+        color: #525454;
+        font-size: 22px;
+        margin: 0 0 10px 0;
+        text-align: center;
+      }
+      .button {
+       background-color: #008CBA; /* Blue */
+       border: none;
+       color: white;
+       padding: 15px 15px;
+       text-align: center;
+       text-decoration: none;
+       display: inline-block;
+       font-size: 13px;
+       border-radius: 12px;
+      }
+      
+      #right-panel {
+        position: fixed;
+        bottom: 2%;
+        width: 28%;
+      }
+      #more {
+        width: 96%;
+      }
+
+      #show-museum,#show-worshipplace,#show-amusementpark,#show-attraction {
+        width: 48%;
+        display: none;
+      }
+
+      #show-park,#show-food,#show-stadium,#show-mall,#show-zoo,#show-beach,#show-club{
+        width: 48%;
+        display: none;
+      }
+
+      #map {
+        bottom:0px;
+        height: 100%;
+        left: 28%;
+        position: absolute;
+        right: 0px;
+      }
+
+      #current {
+        width:30px;
+        height:30px;
+        background-color: #FFFFFF;
+        position:absolute;
+          bottom:22%;
+          color: #fff;
+          
+
+          border: 1px solid transparent;
+          border-radius: 2px;
+          box-sizing: border-box;
+          -moz-box-sizing: border-box;
+
+          outline: none;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          alignment-baseline:central;
+          left:97%;
+          text-align:center;
+          text-decoration:none;
+
+
+          margin:0px auto;
+      }
+
+      #info {
+         width:30px;
+        height:30px;
+        position: absolute;
+        bottom:0px;
+        left:65%;
+      }
+
+      #info button{
+        width:50px;
+        height:30px;
+        position: absolute;
+        bottom:0px;
+        left:65%;
+      }
+
+      #popup {
+        background-color: #FFFFFF;
+        position:absolute;
+        top:8%;
+        left: 29%;
+        font-size: 20px;
+        
+      }
+
+      
+      .options-box {
+        background-image: url("bg.jpg");
+        border: 1px solid #999;
+        border-radius: 3px;
+        height: 100%;
+        line-height: 35px;
+        padding-left:1px;
+        text-align: left;
+        width: 28%;
+      }
+      #toggle-drawing{
+        width : 98%;
+      }
+
+      /* The switch - the box around the slider */
+      .switch {
+        position: absolute;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        top:60%;
+        left: 22%;
+      }
+
+      #drop-down{
+        position: absolute;
+        top:18%;
+        margin-left: 13px;
+      }
+
+      #switchdiv{
+        position: absolute;
+        height:60px;
+        top: 6%;
+        text-align: left;
+        font-size: 13px;
+        width: 98%;
+      }
+
+      #switchtxt {
+         float: left;
+         margin-top: 33px;
+         width:20%;
+      }
+
+      #switchtxt h1{
+        color: #3bb3e0;
+        font-stretch: extra-expanded;
+        font-size: 28px;
+        
+      }
+
+      /* Hide default HTML checkbox */
+    .switch input {
+      display:none;
+      float: right;
+      }
+
+    /* The slider */
+    .slider {
+     position: absolute;
+     cursor: pointer;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background-color: #ccc;
+     -webkit-transition: .4s;
+     transition: .4s;
+    }
+
+   .slider:before {
+     position: absolute;
+     content: "";
+     height: 26px;
+     width: 26px;
+     left: 4px;
+     bottom: 4px;
+     background-color: white;
+     -webkit-transition: .4s;
+     transition: .4s;
+   }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+   }
+
+    input:focus + .slider {
+     box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+     -webkit-transform: translateX(26px);
+     -ms-transform: translateX(26px);
+     transform: translateX(26px);
+    }
+
+    #placesopts{
+      margin-top: 40px;
+    }
+    
+    .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+      }
+
+      .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
+
+      #title {
+        color: #fff;
+        background-color: #4d90fe;
+        font-size: 25px;
+        font-weight: 500;
+        padding: 6px 12px;
+      }
+      #target {
+        width: 345px;
+      }
+
+      #panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+        display: none;
+
+      }
+
+      #panel select, #panel input {
+        font-size: 15px;
+      }
+
+      #panel select {
+        width: 100%;
+      }
+
+      #panel i {
+        font-size: 12px;
+      }
+
+      #panel {
+        font-family: Arial, Helvetica, sans-serif;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        height: 93%;
+        width: 71%;
+        padding: 5px;
+        z-index: 5;
+        border: 1px solid #999;
+        background: #fff;
+      }
+
+      h2 {
+        font-size: 22px;
+        margin: 0 0 5px 0;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        height: 93%;
+        width: 100;
+        overflow-y: scroll;
+      }
+      li {
+        background-color: #f1f1f1;
+        padding: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      li:nth-child(odd) {
+        background-color: #fcfcfc;
+      }
+
+      #detailed {
+
+        font-family: Arial, Helvetica, sans-serif;
+        position: absolute;
+        display: none;
+        right: 0px;
+        top: 0px;
+        height: 98%;
+        width: 29%;
+        float: right;
+        padding: 5px;
+        z-index: 5;
+        border: 1px solid #999;
+        background-image: url("images/bg.jpg");
+        overflow-y: scroll;
+      }
+
+      #pname{
+        font-family:Algerian Regular;
+        font-weight: bold;
+        font-variant: small-caps;
+        font-color: white;
+        font-size: 25px;
+        width:92%;
+        height: 35px;
+      }
+
+      #pimgs{
+        margin-top: 25px;
+        width: 98%;
+        height: 300px;
+      }
+
+      #pimgs img{
+        width: 90%;
+        height: 300px;
+      }
+
+      #prating{
+        margin-top: 10px;
+        width: 98%;
+        height: 35px;
+        font-weight:bold;
+      }
+
+      #popen{
+        
+        margin-top: 10px;
+        width: 98%;
+        height: 150px;
+        overflow:none;
+      }
+
+      #popen p {
+        width:255px;
+        float: right;
+      }
+
+      #pno{
+        
+        margin-top: 15px;
+        width: 98%;
+        height: 35px;
+      }
+
+      #pno p{
+        width: 300px;
+        text-overflow: none;
+        text-align: center;
+      }
+
+      #pweather{
+        margin-top: 10px;
+        width: 98%;
+        height: 200px;
+      }
+
+      #padd{
+        
+        margin-top: 10px;
+        width: 98%;
+        height: 150px;
+      }
+
+      #padd p{
+        float: right;
+        width:250px;
+        font-variant: small-caps;
+      }
+
+      #preview{
+        
+        margin-top: 10px;
+        width: 98%;
+        height: 300px;
+      } 
+
+      #close {
+        width: 35px;
+        height: 35px;
+        right: 3px;
+        position: absolute;
+        top:3px;
+      }
+
+      #pimglist {
+        overflow-x: auto;
+        display: inline-block;
+        overflow-y: auto;
+        height: 150px;
+        
+      }
+
+      #pimglist img{
+        width: 150px;
+        height: 150px;
+        padding-left: 10px;
+        padding-top: 5px;
+        display: inline;
+      }
+
+      #dropbtn {
+      background-color: #008CBA;
+      width:350px;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      }
+
+      #dropdown {
+          position: relative;
+          display: inline-block;
+          width:350px;
+      }
+
+      #dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+      }
+
+      #dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+      }
+
+      #dropdown-content a:hover {background-color: #f1f1f1}
+
+      #dropdown:hover #dropdown-content {
+          display: block;
+          width: 350px;
+      }
+
+      #dropdown:hover #dropbtn {
+          background-color: #3e8e41;
+      }
+
+      #menu {
+        display: none;
+      }
+
+      #checkboxes {
+        width: 160px;
+        height: 335px;
+        background-color: #ffffff;
+        position:absolute;
+        top:29%;
+        left: 28%;
+        display: none;
+
+      }
+
+      .squaredTwo {
+          width: 18px;
+          height: 18px;
+          position: relative;
+          background: #fcfff4;
+          background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+          box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+          label {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            background: linear-gradient(top, #222 0%, #45484d 100%);
+            box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,1);
+            &:after {
+              content: '';
+              width: 9px;
+              height: 5px;
+              position: absolute;
+              top: 4px;
+              left: 4px;
+              border: 3px solid #fcfff4;
+              border-top: none;
+              border-right: none;
+              background: transparent;
+              opacity: 0;
+              transform: rotate(-45deg);
+            }
+            &:hover::after {
+              opacity: 0.3;
+            }
+          }
+          input[type=checkbox] {
+            visibility: hidden;
+            &:checked + label:after {
+              opacity: 1;
+            }    
+          }
+        }
+
+   </style>
+  </head>
+  <body>
+   <div class="container">
+       <div class="options-box">
+
+          <div>
+           <input id="toggle-drawing"  type="button" class ="button" style="background-image:url(images/draw.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+          </div>
+          
+          <div id = "switchdiv"><!-- Rectangular switch -->
+            <div id ="switchtxt"><h1><strong>Nearby Search</strong></h1></div>
+            <label class="switch">
+            <input type="checkbox" id="nearby">
+            <div class="slider"></div>
+            </label>
+          </div><br><br>
+
+          <div id="dropdown">
+            <button id="dropbtn">Places</button>
+            <div id="dropdown-content">
+              
+            </div>
+          </div>
+          <br>
+          
+          <div id ="menu">
+            <img src ="images/menu.png" height="30px" width ="30px" style="float:right">
+          </div>
+
+          <div id = "placesopts">
+             
+            <!-- <div> -->
+              <input id="show-amusementpark" type="button" class ="button" style="background-image:url(images/amusement.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+              <input id="show-attraction" type="button" class ="button" style="background-image:url(images/attractions.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+              
+           <!-- </div> -->
+
+           <!-- <div> -->
+              <input id="show-beach" type="button" class ="button" style="background-image:url(images/beaches.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+              <input id="show-food" type="button" class ="button" style="background-image:url(images/food.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+           <!-- </div> -->
+
+           <!-- <div> -->
+              <input id="show-museum" type="button" class ="button"  style="background-image:url(images/museums.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+              <input id="show-club" type="button" class ="button" style="background-image:url(images/nightlife.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+              
+           <!-- </div> -->
+
+           <!-- <div> -->
+              <input id="show-park" type="button" class ="button" style="background-image:url(images/parks.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+              <input id="show-worshipplace" type="button" class ="button" style="background-image:url(images/religious.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+              
+           <!-- </div> -->
+
+           <!-- <div> -->
+              <input id="show-mall" type="button" class ="button" style="background-image:url(images/malls.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+              <input id="show-zoo" type="button" class ="button" style="background-image:url(images/zoo.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+            <!-- </div> -->
+
+            <!-- <div> -->
+              
+              <input id="show-stadium" type="button" class ="button" style="background-image:url(images/stadium.jpg);background-size: 100% 100%;background-repeat: no-repeat;">
+            <!-- </div> -->
+            <br>
+
+          </div>
+         
+         <div id="right-panel">
+           <button id="more" class="button">More results</button>
+         </div>
+  
+        </div>
+      </div>
+       <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+
+      <div id="map"></div>
+
+      <div id = "current">
+       <img src ="https://cdn3.iconfinder.com/data/icons/map-markers-1/512/residence-512.png" width="30px" height="30px">
+      </div>
+
+      <div id = "info">
+        <button >
+          <img src="http://www.freeiconspng.com/uploads/up-arrow-png-20.png" width="30px" height="25px">
+        </button>
+      </div>
+
+      <div id = "popup"></div>
+
+      <div id = "checkboxes">
+        <table>
+          <tr>
+            <td><img src="images/amuse.png" width="20px" height="20px"></td>
+            <td> Amusement</td>
+            <td>&nbsp <input type="checkbox" name="Amusement" id = "Amusement" class="squaredTwo"></td>
+          </tr>
+
+          <tr>
+            <td><img src="images/attract.png" width="25px" height="25px"></td>
+            <td>&nbsp Attractions</td>
+            <td>&nbsp <input type="checkbox" name="Attractions" id = "Attractions" class="squaredTwo"></td>
+          </tr>
+
+          <tr>
+            <td><img src="images/beach.png" width="25px" height="25px"></td>
+            <td>&nbsp Beaches</td>
+            <td>&nbsp <input type="checkbox" name="Beaches" id = "Beaches" class="squaredTwo"></td>
+          </tr>
+
+          <tr>
+            <td><img src="images/food.png" width="25px" height="25px"></td>
+            <td>&nbsp Food</td>
+            <td>&nbsp <input type="checkbox" name="Food" id = "Food" class="squaredTwo"></td>
+          </tr>
+
+
+          <tr>
+            <td><img src="images/mus.png" width="25px" height="25px"></td>
+            <td>&nbsp Museums</td>
+            <td>&nbsp <input type="checkbox" name="Museums" id = "Museums" class="squaredTwo"></td>
+          </tr>
+
+          <tr>
+            <td><img src="images/nightlife.png" width="25px" height="25px"></td>
+            <td>&nbsp Nightlife</td>
+            <td>&nbsp <input type="checkbox" name="Nightlife" id = "Nightlife" class="squaredTwo"></td>
+          </tr>
+
+          <tr>
+            <td><img src="images/parks.png" width="25px" height="25px"></td>
+            <td>&nbsp Parks</td>
+            <td>&nbsp <input type="checkbox" name="Parks" id = "Parks" class="squaredTwo"></td>
+          </tr>
+
+          <tr>
+            <td><img src="images/religious.png" width="25px" height="25px"></td>
+            <td>&nbsp Religious</td>
+            <td>&nbsp <input type="checkbox" name="Religious" id = "Religious" class="squaredTwo"></td>
+          </tr>
+
+          <tr>
+            <td><img src="images/shop.png" width="25px" height="25px"></td>
+            <td>&nbsp Shopping</td>
+            <td>&nbsp <input type="checkbox" name="Shopping" id = "Shopping" class="squaredTwo"><br></td>
+          </tr>
+
+          <tr>
+            <td><img src="images/wild.png" width="25px" height="25px"></td>
+            <td>&nbsp Wildlife</td>
+            <td>&nbsp <input type="checkbox" name="Wildlife" id = "Wildlife" class="squaredTwo"></td>
+          </tr>
+
+        </table>
+        
+        
+      </div>
+
+      <div id="panel">
+        <h2>Results</h2>
+        <ul id="places"></ul>
+      </div>
+
+      <div id ="detailed">
+        <div id = "close">
+          <img src = "http://wfarm4.dataknet.com/static/resources/icons/set21/3d6cfa22527.png" width="25px" height="25px">
+        </div>
+        <div id = "pname"></div>
+        <div id = "pimgs"><img src ="" id ="mainimg"></div><br>
+        <div id = "pimglist"></div>
+        <div id = "prating"></div>
+        <div id = "pweather"></div>
+        <div id = "popen"></div>
+        <div id = "pno"></div>
+        <div id = "padd"></div>
+        <div id = "preview"></div>
+      </div>
+    <script>
+    var map;//var for loading map script
+    var service;//var for textSearch,nearbySearch and radarSearch
+    var infowindow;//var to show information about the place in a small window
+    var data = [];//array of detailed info about a place
+    var placeMarkers = [];//array of google markers
+
+    var data = JSON.parse(localStorage.getItem('locationCategoryMapping'));
+      console.log(data);
+      for(var i = 0; i < data.length; i++){
+        const placeArray = data[i];
+        for(var j in placeArray){
+          // j is a place
+          // placeArray[j] is an array of categories 
+          // console.log(placeArray[j], 'category', j);
+          
+          var a = document.createElement('a');
+          var linkText = document.createTextNode(capitalizeFirstLetter(j));
+          a.appendChild(linkText);
+
+          a.title = j;
+
+          a.onclick = (function(place, categoryArray) {
+                return function() {
+                  displayCategory(place, categoryArray)
+                };
+            }(j, placeArray[j]));
+            document.getElementById('dropdown-content').appendChild(a);
+          
+        }
+      }
+
+
+      function displayCategory(place, categoryArray) {
+        console.log(' i was called with data ', categoryArray);
+        //console.log(categoryArray[0],categoryArray[1]);
+        var place = place;
+        var latLongObj = getLatLong(place);
+        //console.log(latLongObj, place);
+        var a = _.values(latLongObj);
+        var latLng = new google.maps.LatLng(a[0], a[1]);
+        map.panTo(latLng);
+        map.setZoom(9);
+        document.getElementById("show-club").style.display = 'none';
+        document.getElementById("show-mall").style.display = 'none';
+        document.getElementById("show-museum").style.display = 'none';
+        document.getElementById("show-zoo").style.display = 'none';
+        document.getElementById("show-beach").style.display = 'none';
+        document.getElementById("show-amusementpark").style.display = 'none';
+        document.getElementById("show-park").style.display = 'none';
+        document.getElementById("show-worshipplace").style.display = 'none';
+        document.getElementById("menu").style.display = 'block';
+        for(var i in categoryArray) {
+          var a = document.createElement('a');
+          // var linkText = document.createTextNode(capitalizeFirstLetter(categoryArray[i]));
+          // a.appendChild(linkText);
+          a.title = categoryArray[i];
+          displayBtn(a.title);
+          document.getElementById("show-attraction").style.display = 'inline-block';
+          document.getElementById("Attractions").checked = 'true';
+          
+        }
+      }
+
+      function displayBtn(text){
+        if(text == "nightlife"){
+          document.getElementById("show-club").style.display = 'inline-block';
+          document.getElementById("Nightlife").checked = 'true';
+          
+        }
+        
+
+        if(text == "shopping"){
+          document.getElementById("show-mall").style.display = 'inline-block';
+          document.getElementById("Shopping").checked = 'true';
+          
+        }
+        
+
+        if(text == "Museums"){
+          document.getElementById("show-museum").style.display = 'inline-block';
+          document.getElementById("Museums").checked = 'true';
+          
+        }
+        
+
+        if(text == "wildlife"){
+          document.getElementById("show-zoo").style.display = 'inline-block';
+          document.getElementById("Wildlife").checked = 'true';
+          
+        }
+        
+
+
+        if(text == "beaches"){
+          document.getElementById("show-beach").style.display = 'inline-block';
+          document.getElementById("Beaches").checked = 'true';
+          
+        }
+        
+
+        if(text == "amusement"){
+          document.getElementById("show-amusementpark").style.display = 'inline-block';
+          document.getElementById("Amusement").checked = 'true';
+          
+        }
+
+        if(text == "parks"){
+          document.getElementById("show-park").style.display = 'inline-block';
+          document.getElementById("Parks").checked = 'true';
+          
+        }
+
+        if(text == "religious"){
+          document.getElementById("show-worshipplace").style.display = 'inline-block';
+          document.getElementById("Religious").checked = 'true';
+          
+        }
+
+      }
+
+      function capitalizeFirstLetter(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+
+
+    
+    var imgArray = new Array();
+    // This global polygon variable is to ensure only ONE polygon is rendered.
+      var polygon = null;//polygon overlay for map
+
+      //Function to initiate the map
+    function initMap() {
+      var styles = [ //set a style for the maps
+      {
+       featureType: 'water',
+       stylers: [
+       { color: '#19a0d8' }
+            ]
+      },{
+      featureType: 'administrative',
+      elementType: 'labels.text.stroke',
+      stylers: [
+      { color: '#ffffff' },
+      { weight: 6 }
+      ]
+      },{
+      featureType: 'administrative',
+      elementType: 'labels.text.fill',
+      stylers: [
+     { color: '#e85113' }
+      ]
+      },{
+      featureType: 'road.highway',
+      elementType: 'geometry.stroke',
+      stylers: [
+      { color: '#efe9e4' },
+      { lightness: -40 }
+      ]
+      },{
+      featureType: 'transit.station',
+      stylers: [
+      { weight: 9 },
+      { hue: '#e85113' }
+        ]
+      },{
+        featureType: 'road.highway',
+        elementType: 'labels.icon',
+        stylers: [
+          { visibility: 'off' }
+        ]
+      },{
+        featureType: 'water',
+        elementType: 'labels.text.stroke',
+        stylers: [
+          { lightness: 100 }
+        ]
+      },{
+      featureType: 'water',
+      elementType: 'labels.text.fill',
+      stylers: [
+      { lightness: -100 }
+        ]
+      },{
+        featureType: 'poi',
+        elementType: 'geometry',
+        stylers: [
+          { visibility: 'on' },
+          { color: '#f0e4d3' }
+        ]
+      },{
+        featureType: 'road.highway',
+        elementType: 'geometry.fill',
+        stylers: [
+          { color: '#efe9e4' },
+          { lightness: -25 }
+          ]
+        }
+      ];
+
+      //Initate the maps by giving it a location
+      map = new google.maps.Map(document.getElementById('map'), {
+       zoom: 11,
+       center: new google.maps.LatLng( 18.9398208, 72.8354676),
+       styles : styles
+      }); 
+      
+      infowindow = new google.maps.InfoWindow();
+      // Initialize the drawing manager.
+        var drawingManager = new google.maps.drawing.DrawingManager({
+          drawingMode: google.maps.drawing.OverlayType.POLYGON,
+          drawingControl: true,
+          drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_LEFT,
+            drawingModes: [
+              google.maps.drawing.OverlayType.POLYGON
+            ]
+          }
+        });
+
+        var inf = new google.maps.InfoWindow();//constructor for infowindow
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);//searchbar
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+        var markers = [];
+        
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location,
+              animation: google.maps.Animation.BOUNCE
+            }));
+            
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+         
+        });
+
+        //Add event listeners for the buttons
+      document.getElementById('current').addEventListener('click', currentlocation);
+      document.getElementById('show-museum').addEventListener('click', museum);
+      document.getElementById('show-worshipplace').addEventListener('click', worship);
+      document.getElementById('show-amusementpark').addEventListener('click', amusementpark);
+      document.getElementById('show-park').addEventListener('click', park);
+      document.getElementById('show-food').addEventListener('click', food);
+      document.getElementById('show-zoo').addEventListener('click', zoo);
+      document.getElementById('show-mall').addEventListener('click', mall);
+      document.getElementById('show-stadium').addEventListener('click', stadium);
+      document.getElementById('show-attraction').addEventListener('click', attraction);
+      document.getElementById('show-beach').addEventListener('click', beach);
+      document.getElementById('show-club').addEventListener('click', club);
+      document.getElementById('info').addEventListener('click', function(){
+      
+      //display or hide the right panel containing detailed info about a place
+        if (document.getElementById('panel').style.display === 'none') {
+          document.getElementById('panel').style.display = 'block';
+      } else {
+          document.getElementById('panel').style.display = 'none';
+      }
+    
+      });
+      //hide the right panel on clicking close icon
+      document.getElementById('close').addEventListener('click', function(){
+          document.getElementById('detailed').style.display = 'none';
+      });
+      //set the drawing tools on and off
+      document.getElementById('toggle-drawing').addEventListener('click', function() {
+          toggleDrawing(drawingManager);
+        });
+     document.getElementById('toggle-drawing').addEventListener('dblclick',deleteMarkers);
+
+     //vars to show info to the user about what does the button do
+     var e = document.getElementById('current');
+      e.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get your current location";
+     }
+     e.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var a = document.getElementById('show-museum');
+      a.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get museums nearby";
+     }
+     a.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var b = document.getElementById('show-worshipplace');
+      b.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get worship places nearby";
+     }
+     b.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var c = document.getElementById('show-stadium');
+      c.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get stadiums nearby";
+     }
+     c.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var d = document.getElementById('show-mall');
+      d.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get malls nearby";
+     }
+     d.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var f = document.getElementById('show-zoo');
+      f.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get zoo nearby";
+     }
+     f.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var g = document.getElementById('show-food');
+      g.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get restaurants and hotels nearby";
+     }
+     g.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var h = document.getElementById('show-park');
+      h.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get parks nearby";
+     }
+     h.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var i = document.getElementById('show-amusementpark');
+      i.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get amusement parks nearby";
+     }
+     i.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var j = document.getElementById('toggle-drawing');
+      j.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get area of your drawing or places within it";
+     }
+     j.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var k = document.getElementById('more');
+      k.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get more results";
+     }
+     k.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var l = document.getElementById('switchdiv');
+      l.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get places around your current location";
+     }
+     l.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var m = document.getElementById('show-attraction');
+      m.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get attractions nearby";
+     }
+     m.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var n = document.getElementById('info');
+      n.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get results in tabular format";
+     }
+     n.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+
+     var t = document.getElementById('show-club');
+      t.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get clubs nearby";
+     }
+     t.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+     var o = document.getElementById('show-beach');
+      o.onmouseover = function() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').innerHTML = "Get beaches nearby";
+     }
+     o.onmouseout = function() {
+     document.getElementById('popup').style.display = 'none';
+     }
+
+
+     //Function to get LatLng of a place
+     document.getElementById("menu").addEventListener('click',function(){
+        if(document.getElementById("checkboxes").style.display == 'none'){
+
+          document.getElementById("checkboxes").style.display = 'block';
+        }
+        else{
+
+          document.getElementById("checkboxes").style.display = 'none';
+
+            if(document.getElementById("Nightlife").checked == true){
+              document.getElementById("show-club").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-club").style.display = 'none';
+            }
+            if(document.getElementById("Attractions").checked == true){
+              document.getElementById("show-attraction").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-attraction").style.display = 'none';
+            }
+            if(document.getElementById("Amusement").checked == true){
+              document.getElementById("show-amusementpark").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-amusementpark").style.display = 'none';
+            }
+            if(document.getElementById("Shopping").checked == true){
+              document.getElementById("show-mall").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-mall").style.display = 'none';
+            }
+            if(document.getElementById("Food").checked == true){
+              document.getElementById("show-food").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-food").style.display = 'none';
+            }
+            if(document.getElementById("Parks").checked == true){
+              document.getElementById("show-park").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-park").style.display = 'none';
+            }
+            if(document.getElementById("Museums").checked == true){
+              document.getElementById("show-museum").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-museum").style.display = 'none';
+            }
+            if(document.getElementById("Wildlife").checked == true){
+              document.getElementById("show-zoo").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-zoo").style.display = 'none';
+            }
+            if(document.getElementById("Beaches").checked == true){
+              document.getElementById("show-beach").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-beach").style.display = 'none';
+            }
+            if(document.getElementById("Religious").checked == true){
+              document.getElementById("show-worshipplace").style.display = 'inline-block';
+            }
+            else{
+              document.getElementById("show-worshipplace").style.display = 'none';
+            }
+
+        }
+     });
+
+
+     //function to decide what to do when user completes a polygon overlay on the map
+      drawingManager.addListener('overlaycomplete', function(event) {
+          // First, check if there is an existing polygon.
+          // If there is, get rid of it and remove the markers
+          if (polygon) {
+            polygon.setMap(null);//hide the overlay polygon
+            hideMarkers(placeMarkers);//hide all the markers
+          }
+          // Switching the drawing mode to the HAND (i.e., no longer drawing).
+          drawingManager.setDrawingMode(null);
+          
+          // Creating a new editable polygon from the overlay.
+          polygon = event.overlay;
+          polygon.setEditable(true);//allow user to edit the polygon
+          // Searching within the polygon.
+          searchWithinPolygon();//search markers within the polygon overlay
+          // Make sure the search is re-done if the poly is changed.
+          polygon.getPath().addListener('set_at', searchWithinPolygon);//This event is fired when insertAt() is called. 
+          polygon.getPath().addListener('insert_at', searchWithinPolygon);//This event is fired when setAt() is called. 
+          polygon.addListener('click',function(){//function to calculate the area of polygon when user clicks on it
+             var area = google.maps.geometry.spherical.computeArea(polygon.getPath());
+             var areakm = (area/1000000);//convert area into sq km
+             window.alert("Area of the selected region is "+areakm+" sq km.");
+          });  
+      });
+  } 
+  
+    function museum(){
+      var service = new google.maps.places.PlacesService(map);
+      if( document.getElementById("nearby").checked == true){//check whether nearby checkbox is checked
+      
+        
+        if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(function(position) {//get current location
+           var lat = position.coords.latitude;//get latitude of the current location
+           var lon= position.coords.longitude;//get longitude of the current location
+           var location = new google.maps.LatLng(lat,lon);//set the lat n long
+           service.nearbySearch({//fire a nearby search event 
+             location: location,//the current location
+             radius: '15000',//radius of search is 15km
+             type: 'museum'//the search term is museum
+            },  callback);
+           var locate = new google.maps.Marker({//marker for the current location
+              position: location,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,//create a drop animation for the current location marker
+              map: map
+            });
+         });
+        }
+      }
+      else {
+        service.textSearch({//fire a text search event against the keyword
+          bounds: map.getBounds(),//get the recatangular bounds of the map which is visible to the user
+          query: 'museum',//we are querying to find museum
+          type: 'museum'
+        }, callback);
+      }
+    }
+
+    function club(){
+      var service = new google.maps.places.PlacesService(map);
+      if( document.getElementById("nearby").checked == true){//check whether nearby checkbox is checked
+      
+        
+        if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(function(position) {//get current location
+           var lat = position.coords.latitude;//get latitude of the current location
+           var lon= position.coords.longitude;//get longitude of the current location
+           var location = new google.maps.LatLng(lat,lon);//set the lat n long
+           service.nearbySearch({//fire a nearby search event 
+             location: location,//the current location
+             radius: '15000',//radius of search is 15km
+             type: 'night-club'//the search term is museum
+            },  callback);
+           var locate = new google.maps.Marker({//marker for the current location
+              position: location,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,//create a drop animation for the current location marker
+              map: map
+            });
+         });
+        }
+      }
+      else {
+        service.textSearch({//fire a text search event against the keyword
+          bounds: map.getBounds(),//get the recatangular bounds of the map which is visible to the user
+          query: 'club',
+          type: 'night-club'
+        }, callback);
+      }
+    }
+
+
+    function attraction(){
+      var service = new google.maps.places.PlacesService(map);
+      if( document.getElementById("nearby").checked == true){
+      
+        
+        if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(function(position) {
+           var lat = position.coords.latitude;
+           var lon= position.coords.longitude;
+           var location = new google.maps.LatLng(lat,lon);
+           service.nearbySearch({
+             location: location,
+             radius: '15000',
+             type: 'points_of_interest'
+            },  callback);
+           var locate = new google.maps.Marker({
+              position: location,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,
+              map: map
+            });
+         });
+        }
+      }
+      else {
+       
+        service.textSearch({
+          bounds: map.getBounds(),
+          query: 'attraction',
+          type: 'points_of_interest'
+        }, callback);
+      }
+    }
+
+    function beach(){
+      var service = new google.maps.places.PlacesService(map);
+      if( document.getElementById("nearby").checked == true){
+      
+        
+        if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(function(position) {
+           var lat = position.coords.latitude;
+           var lon= position.coords.longitude;
+           var location = new google.maps.LatLng(lat,lon);
+           service.nearbySearch({
+             location: location,
+             radius: '15000',
+             keyword: 'beach',
+             type: 'natural_feature'
+            },  callback);
+           var locate = new google.maps.Marker({
+              position: location,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,
+              map: map
+            });
+         });
+        }
+      }
+      else {
+       
+        service.textSearch({
+          bounds: map.getBounds(),
+          query: 'beach',
+          type: 'natural_feature'
+        }, callback);
+      }
+    }
+
+    function worship(){
+      var service = new google.maps.places.PlacesService(map);
+      if( document.getElementById("nearby").checked == true){
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon= position.coords.longitude;
+            var location = new google.maps.LatLng(lat,lon);
+            service.nearbySearch({
+              location: location,
+              radius: '15000',
+              type: 'place_of_worship'
+            },  callback);
+            var locate = new google.maps.Marker({
+              position: location,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,
+              map: map
+            });
+          });
+        }
+      }
+      else{
+         
+         service.textSearch({
+          bounds: map.getBounds(),
+          query: 'worship places'
+        }, callback);
+      }
+    }
+
+    function amusementpark(){
+      var service = new google.maps.places.PlacesService(map);
+       if( document.getElementById("nearby").checked == true){
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+             var lat = position.coords.latitude;
+             var lon= position.coords.longitude;
+             var location = new google.maps.LatLng(lat,lon);
+             service.nearbySearch({
+               location: location,
+               radius: '15000',
+               type: 'amusement_park'
+              },  callback);
+            var locate = new google.maps.Marker({
+              position: location,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,
+              map: map
+            });
+         });
+        }
+      }
+      else{
+        
+          service.textSearch({
+          bounds: map.getBounds(),
+          query: 'amusement park',
+          type: 'amusement_park'
+        }, callback);
+      }
+      
+    }
+
+    function park(){
+      var service = new google.maps.places.PlacesService(map);
+       if( document.getElementById("nearby").checked == true){
+         if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              var lat = position.coords.latitude;
+              var lon= position.coords.longitude;
+              var location = new google.maps.LatLng(lat,lon);
+              service.nearbySearch({
+               location: location,
+               radius: '15000',
+               type: 'park'
+              },  callback);
+              var locate = new google.maps.Marker({
+                position: location,
+                icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,
+              map: map
+            });
+         });
+        }
+      }
+      else{
+        
+        service.textSearch({
+          bounds: map.getBounds(),
+          query: 'parks',
+          type: 'park'
+        }, callback);
+      }
+    }
+
+    function food(){
+      var service = new google.maps.places.PlacesService(map);
+       if( document.getElementById("nearby").checked == true){
+         if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+             var lat = position.coords.latitude;
+             var lon= position.coords.longitude;
+             var location = new google.maps.LatLng(lat,lon);
+             service.nearbySearch({
+               location: location,
+               radius: '15000',
+               type: 'restaurant'
+              },  callback);
+              var locate = new google.maps.Marker({
+                position: location,
+                icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+                },
+                animation: google.maps.Animation.DROP,
+                map: map
+             });
+         });
+        }
+      }
+      else{
+     
+        service.textSearch({
+          bounds: map.getBounds(),
+          query: 'restaurant',
+          type: 'restaurant'
+        }, callback);
+      }
+    }
+
+    function zoo(){
+      var service = new google.maps.places.PlacesService(map);
+       if( document.getElementById("nearby").checked == true){
+         if (navigator.geolocation) {
+           navigator.geolocation.getCurrentPosition(function(position) {
+           var lat = position.coords.latitude;
+           var lon= position.coords.longitude;
+           var location = new google.maps.LatLng(lat,lon);
+           service.nearbySearch({
+              location: location,
+              radius: '15000',
+              type: 'zoo'
+            },  callback);
+           var locate = new google.maps.Marker({
+              position: location,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,
+              map: map
+            });
+         });
+       }
+     }
+      else{
+
+        service.textSearch({
+          bounds: map.getBounds(),
+          query: 'zoo'
+        }, callback);  
+      }
+    }
+
+    function mall(){
+      var service = new google.maps.places.PlacesService(map);
+       if( document.getElementById("nearby").checked == true){
+         if (navigator.geolocation) {
+           navigator.geolocation.getCurrentPosition(function(position) {
+           var lat = position.coords.latitude;
+           var lon= position.coords.longitude;
+           var location = new google.maps.LatLng(lat,lon);
+           var locate = new google.maps.Marker({
+              position: location,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,
+              map: map
+            });
+          service.nearbySearch({
+           location: location,
+           radius: '15000',
+           type: 'shopping_mall'
+          },  callback);
+         });
+       }
+     }
+      else{
+       
+        service.textSearch({
+          bounds: map.getBounds(),
+          query: 'mall'
+        }, callback);
+      }
+    }
+
+    function stadium(){
+      var service = new google.maps.places.PlacesService(map);
+       if( document.getElementById("nearby").checked == true){
+         if (navigator.geolocation) {
+           navigator.geolocation.getCurrentPosition(function(position) {
+           var lat = position.coords.latitude;
+           var lon= position.coords.longitude;
+           var location = new google.maps.LatLng(lat,lon);
+           service.nearbySearch({
+            location: location,
+            radius: '15000',
+            type: 'stadium'
+          },  callback);
+           var locate = new google.maps.Marker({
+              position: location,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,
+              map: map
+            });
+         });
+       }
+      }
+      else{
+      
+        service.textSearch({
+          bounds: map.getBounds(),
+          query: 'stadium'
+        }, callback); 
+      }
+   } 
+    
+    function callback(results, status , pagination ) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+           
+           hideMarkers(placeMarkers);//hide markers
+           document.getElementById("places").innerHTML = "";//set the list of results to null
+           document.getElementById("preview").innerHTML = " ";//set the reviews div to null
+            for (var i = 0; i < results.length; i++) {//create markers
+            createMarker(results[i]);
+           }
+           //to check whether the query has more results
+        if (pagination.hasNextPage) {
+            var moreButton = document.getElementById('more');
+
+            moreButton.disabled = false;
+            moreButton.addEventListener('click', function() {//function to be executed on pressing the more results button
+              hideMarkers(placeMarkers);
+              moreButton.disabled = true;
+              pagination.nextPage();//next page of the results
+              
+            });
+          }
+       }
+
+       //function to hide markers from map
+     function hideMarkers(markers) {
+        for (var i = 0; i < placeMarkers.length; i++) {
+          placeMarkers[i].setMap(null);
+        }
+      }
+
+      //function to create markers
+     function createMarker(place) {
+        var placeLoc = place.geometry.location;//location of the point of interest or place
+        var placeIcon = {//set a different icon for the type of place ie museum,malls etc
+                url: place.icon,
+                scaledSize: new google.maps.Size(30, 32)//set size of icon to be displayed on map
+              };
+        var marker = new google.maps.Marker({//call marker constructor to create marker
+          map: map,
+          icon: placeIcon,
+          id: i,
+          title:place.name,//give title for the place
+          position: place.geometry.location
+        });
+          placeMarkers.push(marker);//push the marker in the array of markers
+
+         if( document.getElementById("nearby").checked == true){//infowindow contents for nearby search results
+            var a = '<li><div style = "width:100%;height:220px;"><div style = "height:100px;float:left"><p style ="text-align:left"><strong>' +place.name + '<br><i>'+place.vicinity+'<br>Rating: </strong></i>'+place.rating+'</div></p><div style ="float:right"><img src="'+place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 200})+'"</div></div></li>';
+           }
+           else{//infowindow contents for text search results
+           var a = '<li><div style = "width:100%;height:220px;"><div style = "height:100px;float:left"><p style ="text-align:left"><strong>' +place.name + '<br><i>'+place.formatted_address+'<br>Rating: </strong></i>'+place.rating+'</div></p><div style ="float:right"><img src="'+place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 200})+'"</div></div></li>';
+           }
+
+           document.getElementById('places').innerHTML += a;//display the information retrieved results in list of results in div places
+
+          //Add a click event on the marker to get the details of place displayed on div detailed
+          google.maps.event.addListener(marker, 'click', function() {
+              document.getElementById('detailed').style.display = 'block';
+              data = [];
+             
+            var serve = new google.maps.places.PlacesService(map);//service constructor to get detailed info about a place
+            document.getElementById('pno').innerHTML = ' ';//set the phone no div to null
+            document.getElementById('popen').innerHTML = ' ';//set opening hours div to null
+            document.getElementById('pimglist').innerHTML = ' ';//set images div to null
+            document.getElementById('preview').innerHTML = ' ';
+            document.getElementById('pweather').innerHTML = ' ';//set reviews div to null
+            serve.getDetails({//get details of the place
+            placeId: place.place_id//the id of the place whose marker was clicked
+            } ,displayDetails); 
+            
+          });
+
+          //Add a mouseover event listener for the marker created
+          google.maps.event.addListener(marker, 'mouseover', function() {//fire a mouse over event on the marker
+            if (infowindow.marker != marker) {
+              infowindow.marker = marker;
+
+          //Display all the results in tabular form with images, name of the place, address and ratings
+              if(document.getElementById("nearby").checked == true){
+                
+                    infowindow.setContent('<div style="width: 300px; heigth:150px ;overflow:hidden;"><div style="float:left ;width:180px"><strong><i>' + place.name + '</i></strong><br><br><strong>Address: </strong>'+place.vicinity+ '<br><br><strong><p>Rating: '+place.rating+'</p></strong></div><div style="width:100px;height:130px;float:right"><img src ="'+place.photos[0].getUrl({'maxWidth': 150, 'maxHeight': 150})+'"</div></div>');
+                    infowindow.open(map, this);
+                    
+              }
+                else
+                  { 
+                    infowindow.setContent('<div style="width: 300px; heigth:150px ;overflow:hidden;"><div style="float:left ;width:180px"><strong><i>' + place.name + '</i></strong><br><br><strong>Address: </strong>'+place.formatted_address+ '<br><br><strong><p>Rating: '+place.rating+'</p></strong></div><div style="width:100px;height:130px;float:right"><img src ="'+place.photos[0].getUrl({'maxWidth': 150, 'maxHeight': 150})+'"</div></div>');
+                infowindow.open(map, this);
+           
+              }
+             
+              infowindow.open(map, this);
+            }
+          });
+
+          //Add a mouseout function to hide infowindow
+         google.maps.event.addListener(marker, 'mouseout', function() {//fire a mouse out event on the marker
+           infowindow.close();
+           infowindow.marker = null;
+           });
+        }
+      }
+         
+        //Function to display details of a place
+          function displayDetails(res, status) {//function to display the detailed info of a place
+              if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    var site_url = 'http://api.openweathermap.org/data/2.5/weather?q='+res.formatted_address+'&appid=8f8452994b783de0156552b417971b49&units=metric';
+                    var xmlhttp = new XMLHttpRequest();//xml request for weather api
+                    xmlhttp.onreadystatechange = function() {
+                      if (this.readyState == 4 && this.status == 200) {//if this is no error
+                        result = JSON.parse(this.responseText);//parse the json and store it in variable result
+                        document.getElementById("pweather").innerHTML = 'Weather status: <img src ="http://openweathermap.org/img/w/'+result.weather[0].icon+'.png" width = "80px" height ="80px"><font style ="font-variant:small-caps"><strong>'+result.weather[0].description +' </strong></font><br><p style ="text-align:center;font-size:15px">Temperature: <strong>'+result.main.temp+' &#8451</strong><br>Humidity: <strong>'+result.main.humidity+' %</strong><br>Wind Speed: <strong>'+result.wind.speed+'m/sec<sup>2</sup></strong><br>Wind Direction: <strong>'+result.wind.deg+'&deg</strong></p>';//display temp and weather status in the weather div
+                      }
+                    };
+                    xmlhttp.open("GET", site_url, true);//get json from the api site
+                    xmlhttp.send();
+
+                    var open = 'null';
+                    var phone_no ='No Information Found!';
+                    try{
+                      open = res.opening_hours.weekday_text; //opening hrs
+                      document.getElementById('popen').style.display = 'block';
+                      try{
+                      phone_no = res.international_phone_number;//phone no
+                      document.getElementById('pno').style.display = 'block';
+                      }
+                      catch(e){
+                        document.getElementById('pno').style.display = 'none';
+                      }
+                      try{
+                        rate = res.rating;
+                        document.getElementById('prating').style.display = 'block';
+                      }
+                      catch(e){
+                        document.getElementById('prating').style.display = 'none';
+                      }
+
+                    }
+                    catch(e){
+                      document.getElementById('popen').style.display = 'none';
+                      
+                    }
+
+                    
+
+                    document.getElementById('pname').innerHTML = res.name;//name of the place
+                    document.getElementById('mainimg').src = res.photos[0].getUrl({'maxWidth': 400, 'maxHeight': 300});//the main img of the place that is to be displayed first
+
+                    document.getElementById('prating').innerHTML = 'Rating: '+res.rating;//get the ratings of the place
+                    document.getElementById('pno').innerHTML ='<font style ="float:left"><strong>Phone number: </strong></font><p>'+phone_no+'</p>';
+                    document.getElementById('padd').innerHTML ='<strong><font style ="float:left">Address: </font></strong><p>'+res.formatted_address +'</p>';//get the address of the place
+                     
+                      document.getElementById('popen').innerHTML = '<b>Opening days: </b><p><i>'+open+'</i></p>' ;
+                      try{
+                        disImgs(res);
+                        
+                      }
+                    catch(e){
+                      
+                    }
+                    for(var i = 0; i <= res.reviews.length; i++){//fetch and display all the reviews about the place
+                        var x =  res.reviews[i].text;//the review
+                        var y = res.reviews[i].author_name;//name of person who submitted a review
+                        var z = 'Rating: '+res.reviews[i].rating;
+                        var image = res.reviews[i].profile_photo_url;//profile pic of person who gave a review
+                        document.getElementById('preview').innerHTML += '<div style="width:100%"><div style="float:left;width:80px;height:80px"><img src ="'+image+'" width="80px" height = "80px" /></div><div style ="width:70%;height:80px"><p style="text-align:center;font-variant:small-caps"><strong>'+y+'<br>'+z+'</strong></p></div></div><br><div>'+x+'<br><br><br></div>'; //set the review,name n pic in proper position in the div
+                        }
+                  
+              
+              }
+          }
+
+          //Function to display the list of images
+          function disImgs(res){
+             for(var i = 0; i <= res.photos.length; i++){
+                         data[i] = res.photos[i].getUrl({'maxWidth': 400, 'maxHeight': 300});
+                        var img = new Image();
+                        img.src = data[i];
+                        document.getElementById("pimglist").appendChild(img);//append imgs to the div
+                        img.addEventListener('click',function(){//display the image as the main image when the user click on it
+                          document.getElementById("mainimg").src = this.src;
+                        });
+                    }
+          }
+      //Function to delete markers
+      function deleteMarkers(){
+        for (var i = 0; i < placeMarkers.length; i++) {
+          placeMarkers[i].setMap(null);
+        }
+        placeMarkers = [];
+        polygon = null;
+        polygon.setMap(null);
+        polygon.setMap(map);
+      }
+      
+      //function to toggle the drawing tools on and off
+     function toggleDrawing(drawingManager) {
+        if (drawingManager.map) {
+          drawingManager.setMap(null);
+           searchWithinPolygon();
+          
+          // In case the user drew anything, get rid of the polygon
+          if (polygon !== null) {
+            polygon.setMap(null);
+          }
+        } else {
+          drawingManager.setMap(map);
+        }
+      }
+
+    // This function hides all markers outside the polygon,
+      // and shows only the ones within it. This is so that the
+      // user can specify an exact area of search.
+      function searchWithinPolygon() {
+        for (var i = 0; i < placeMarkers.length; i++) {
+          if (google.maps.geometry.poly.containsLocation(placeMarkers[i].position, polygon)) {
+            placeMarkers[i].setMap(map);
+          } else {
+            placeMarkers[i].setMap(null);
+          }
+        }
+      }
+
+      //Function to find the current location of the application user
+    function currentlocation(){
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+             lat: position.coords.latitude,
+             lng: position.coords.longitude
+            };
+            var info = new google.maps.InfoWindow();
+            
+            var locate = new google.maps.Marker({
+              position: pos,
+              icon: {
+                url: "http://maps.google.com/mapfiles/kml/paddle/purple-stars.png",
+                scaledSize: new google.maps.Size(32, 32)
+              },
+              animation: google.maps.Animation.DROP,
+              map: map
+            });
+            locate.addListener('click',function(){
+               info.setContent("You are here!!");
+               info.open(map,this);
+            });
+          map.setCenter(pos);
+          }, function() {
+               handleLocationError(true, infoWindow, map.getCenter());
+              });
+        } 
+    }
+        
+   </script>
+
+   <!-- Async is used to load the maps api asynchronously -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyAGUrmrnofXpq-lP4AkqpHcGJayQDbcJus&v=3&callback=initMap">
+    </script>
+
+  </body>
+</html>
